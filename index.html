@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보 조회 페이지</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .info-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; }
+        img { max-width: 100%; height: auto; border-radius: 8px; }
+        #map { width: 100%; height: 400px; background: #eee; }
+    </style>
+</head>
+<body>
+    <div class="info-box">
+        <img id="target-img" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500" alt="대상 이미지">
+        <h2 id="target-name">홍길동</h2>
+        <p id="target-desc">현재 지정된 경로를 이동 중입니다. 특이사항 없음.</p>
+    </div>
+    <h3>현재 위치</h3>
+    <div id="map">
+        <!-- 구글 지도 iframe 코드 삽입 위치 -->
+        <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+
+    <script>
+        // 데이터가 파일이 아니라 코드 내부에 바로 들어가 있어 오류가 발생하지 않습니다.
+        const data = {
+            "name": "홍길동",
+            "status": "현재 지정된 경로를 이동 중입니다. 특이사항 없음."
+        };
+        document.getElementById('target-name').textContent = data.name;
+        document.getElementById('target-desc').textContent = data.status;
+    </script>
+</body>
+</html>
