@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>실시간 정보 확인</title>
+    <style>
+        :root { --primary-color: #2563eb; --bg-color: #f8fafc; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: #1e293b; }
+        .container { max-width: 480px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        
+        /* 이미지 섹션 */
+        .img-container { width: 100%; height: 280px; background: #e2e8f0; overflow: hidden; }
+        #target-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 정보 섹션 */
+        .info-section { padding: 24px; text-align: left; }
+        .badge { display: inline-block; padding: 4px 12px; background: #dbeafe; color: var(--primary-color); border-radius: 99px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+        h2 { margin: 0; font-size: 24px; font-weight: 800; }
+        #target-status { margin-top: 8px; color: #64748b; line-height: 1.6; font-size: 16px; }
+
+        /* 지도 섹션 */
+        #map { width: 100%; height: 320px; background: #f1f5f9; }
+        
+        /* 로딩 애니메이션 */
+        #loader { position: fixed; inset: 0; background: white; display: flex; justify-content: center; align-items: center; z-index: 50; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">데이터를 불러오는 중...</div>
+
+    <div class="container">
+        <div class="img-container">
+            <img id="target-img" src="" alt="대상">
+        </div>
+
+        <div class="info-section">
+            <div class="badge">실시간 상태</div>
+            <h2 id="target-name">-</h2>
+            <p id="target-status">-</p>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <!-- 구글 지도 API (YOUR_API_KEY를 실제 키로 교체하세요) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initApp" async defer></script>
+
+    <script>
+        async function initApp() {
+            try {
+                // 1. data.json 파일 호출
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error('데이터를 찾을 수 없습니다.');
+                const data = await response.json();
+
+                // 2. UI 업데이트
+                document.getElementById('target-name').textContent = data.name;
+                document.getElementById('target-status').textContent = data.status;
+                document.getElementById('target-img').src = data.image_url;
+                document.title = `${data.name} 정보 확인`;
+
+                // 3. 구글 지도 실행
+                const pos = { lat: data.lat, lng: data.lng };
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 16,
+                    center: pos,
+                    disableDefaultUI: true,
+                    zoomControl: true
+                });
+
+                new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: data.name
+                });
+
+                // 로딩 화면 숨기기
+                document.getElementById('loader').style.display = 'none';
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loader').textContent = "오류가 발생했습니다.";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "홍길동",
+  "status": "현재 지정 경로 이동 중 (특이사항 없음)",
+  "lat": 37.5675,
+  "lng": 126.9748,
+  "image_url": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500"
+}
