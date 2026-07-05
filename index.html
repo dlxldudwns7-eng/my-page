@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>실시간 정보 조회</title>
+    <style>
+        /* 모바일 최적화 및 디자인 */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; background: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* 이미지 영역 */
+        .image-box { width: 100%; height: 250px; background: #ddd; overflow: hidden; }
+        #target-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 텍스트 정보 영역 */
+        .info-box { padding: 25px; border-bottom: 8px solid #f0f2f5; }
+        .badge { display: inline-block; padding: 4px 10px; background: #007bff; color: #fff; font-size: 12px; border-radius: 4px; margin-bottom: 10px; }
+        h2 { margin: 0; font-size: 24px; color: #111; }
+        #target-desc { font-size: 16px; color: #555; line-height: 1.6; margin-top: 10px; }
+        
+        /* 지도 영역 */
+        #map { width: 100%; flex: 1; min-height: 300px; background: #eee; }
+        
+        /* 로딩 안내 */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 100; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">데이터 로드 중...</div>
+
+    <div class="container">
+        <!-- 상단: 대상 이미지 -->
+        <div class="image-box">
+            <img id="target-img" src="" alt="대상">
+        </div>
+
+        <!-- 중단: 정보 안내 -->
+        <div class="info-box">
+            <div class="badge">실시간 정보</div>
+            <h2 id="target-name">로딩 중...</h2>
+            <p id="target-desc">잠시만 기다려 주세요.</p>
+        </div>
+
+        <!-- 하단: 실시간 지도 -->
+        <div id="map"></div>
+    </div>
+
+    <!-- Google Maps API (YOUR_API_KEY 부분에 본인의 키 입력) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initPage" async defer></script>
+
+    <script>
+        async function initPage() {
+            try {
+                // 1. data.json 파일에서 정보 읽어오기
+                const response = await fetch('data.json');
+                const data = await response.json();
+
+                // 2. 화면에 데이터 채우기
+                document.getElementById('target-name').textContent = data.name;
+                document.getElementById('target-desc').textContent = data.status;
+                document.getElementById('target-img').src = data.image_url;
+                document.title = data.name + " 정보 조회";
+
+                // 3. 구글 지도 설정
+                const location = { lat: data.lat, lng: data.lng };
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 16,
+                    center: location,
+                    disableDefaultUI: true, // 읽기 전용으로 UI 깔끔하게 설정
+                    zoomControl: true
+                });
+
+                // 4. 지도에 위치 마커 표시
+                new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    title: data.name
+                });
+
+                // 로딩 화면 숨기기
+                document.getElementById('loader').style.display = 'none';
+
+            } catch (error) {
+                console.error("데이터 로드 실패:", error);
+                document.getElementById('loader').textContent = "데이터를 불러올 수 없습니다.";
+            }
+        }
+    </script>
+</body>
+</html>
