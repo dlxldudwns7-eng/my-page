@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보 조회 페이지</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .info-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; }
+        img { max-width: 100%; height: auto; border-radius: 8px; }
+        #map { width: 100%; height: 400px; background: #eee; }
+    </style>
+</head>
+<body>
+
+    <!-- 대상 정보 및 이미지 영역 -->
+    <div class="info-box">
+        <img id="target-img" src="https://drive.google.com/file/d/1C-Gb_QpddI7gpkJoRDCuShn3tTVlc-px/view?usp=sharing" alt="대상 이미지">
+        <h2 id="target-name">대상 이름</h2>
+        <p id="target-desc">대상에 대한 상세 정보가 여기에 표시됩니다.</p>
+    </div>
+
+    <!-- 실시간 위치 지도 영역 -->
+    <h3>현재 위치</h3>
+    <div id="map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m1!5e1!3m2!1sko!2skr!4v1783229147310!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <iframe src="YOUR_GOOGLE_MAP_EMBED_LINK" width="100%" height="400" style="border:0;" allowfullscreen></iframe>
+    </div>
+
+</body>
+</html>
